@@ -14,8 +14,8 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 #Generate and select response
 
-def response_generator(text):
-    response = llm.QA(text)
+def response_generator(info, text):
+    response = llm.QA(info, text)
     return response
 
 # React to user input
@@ -28,7 +28,7 @@ if prompt := st.chat_input("What is up?"):
 
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        st.markdown(response_generator(prompt))
+        st.markdown(response_generator(st.session_state.messages,prompt))
     # Add assistant response to chat history
-    st.session_state.messages.append({"role": "assistant", "content": response_generator(prompt)})
+    st.session_state.messages.append({"role": "assistant", "content": response_generator(st.session_state.messages,prompt)})
 
