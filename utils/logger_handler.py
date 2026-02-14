@@ -1,5 +1,5 @@
 import logging 
-from path_tool import get_abs_path
+from utils.path_tool import get_abs_path
 import os 
 from datetime import datetime
 
@@ -50,4 +50,16 @@ def get_logger(
     file_handler.setFormatter(DEFAULT_LOG_FORMAT)
 
     logger.addHandler(file_handler)
+
+    return logger
     
+
+#快捷获取日志管理器
+logger = get_logger()
+
+if __name__ == '__main__':
+    logger.info('信息日志')
+    logger.error('错误日志')
+    logger.warning('警告日志')
+    logger.debug('调试日志')
+

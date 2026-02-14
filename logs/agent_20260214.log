@@ -1,0 +1,5 @@
+2026-02-14 15:58:17,389 - agent - INFO - logger_handler.py:61 - 信息日志
+2026-02-14 15:58:17,390 - agent - ERROR - logger_handler.py:62 - 错误日志
+2026-02-14 15:58:17,390 - agent - WARNING - logger_handler.py:63 - 警告日志
+2026-02-14 15:58:17,390 - agent - DEBUG - logger_handler.py:64 - 调试日志
+2026-02-14 16:40:09,754 - agent - ERROR - prompt_loader.py:44 - [load_report_prompts]解析报告生成提示词出错, [Errno 2] No such file or directory: '/Users/kerwin/Desktop/Fish_Chatbot/prompts/report_prompt.txt'
