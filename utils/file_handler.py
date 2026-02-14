@@ -53,7 +53,7 @@ def listdir_with_allowed_type(path: str, allowed_types : tuple[str] ):
 
 
 
-def pdf_loader(file_path: str, password: str):
+def pdf_loader(file_path: str, password: str = None):
     """
     加载pdf文件
     """

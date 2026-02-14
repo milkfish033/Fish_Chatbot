@@ -3,3 +3,56 @@
 2026-02-14 15:58:17,390 - agent - WARNING - logger_handler.py:63 - 警告日志
 2026-02-14 15:58:17,390 - agent - DEBUG - logger_handler.py:64 - 调试日志
 2026-02-14 16:40:09,754 - agent - ERROR - prompt_loader.py:44 - [load_report_prompts]解析报告生成提示词出错, [Errno 2] No such file or directory: '/Users/kerwin/Desktop/Fish_Chatbot/prompts/report_prompt.txt'
+2026-02-14 18:17:28,957 - agent - ERROR - vector_store.py:101 - 加载知识库data/贝克洛门窗产品100问完整版.pdf失败，失败信息: 'str' object has no attribute 'endwith'
+Traceback (most recent call last):
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 81, in load_document
+    documents: list[Document] = get_file_documents(path)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 59, in get_file_documents
+    if read_path.endwith("txt"):
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'endwith'
+2026-02-14 18:18:32,922 - agent - ERROR - vector_store.py:101 - 加载知识库data/贝克洛门窗产品100问完整版.pdf失败，失败信息: pdf_loader() missing 1 required positional argument: 'password'
+Traceback (most recent call last):
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 81, in load_document
+    documents: list[Document] = get_file_documents(path)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 63, in get_file_documents
+    return pdf_loader(read_path)
+           ^^^^^^^^^^^^^^^^^^^^^
+TypeError: pdf_loader() missing 1 required positional argument: 'password'
+2026-02-14 18:19:23,313 - agent - ERROR - vector_store.py:101 - 加载知识库data/贝克洛门窗产品100问完整版.pdf失败，失败信息: `pypdf` package not found, please install it with `pip install pypdf`
+Traceback (most recent call last):
+  File "/Users/kerwin/Desktop/Fish_Chatbot/venv/lib/python3.11/site-packages/langchain_community/document_loaders/parsers/pdf.py", line 359, in lazy_parse
+    import pypdf
+ModuleNotFoundError: No module named 'pypdf'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 81, in load_document
+    documents: list[Document] = get_file_documents(path)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 63, in get_file_documents
+    return pdf_loader(read_path)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kerwin/Desktop/Fish_Chatbot/utils/file_handler.py", line 60, in pdf_loader
+    return PyPDFLoader(file_path, password).load()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kerwin/Desktop/Fish_Chatbot/venv/lib/python3.11/site-packages/langchain_core/document_loaders/base.py", line 43, in load
+    return list(self.lazy_load())
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kerwin/Desktop/Fish_Chatbot/venv/lib/python3.11/site-packages/langchain_community/document_loaders/pdf.py", line 305, in lazy_load
+    yield from self.parser.lazy_parse(blob)
+  File "/Users/kerwin/Desktop/Fish_Chatbot/venv/lib/python3.11/site-packages/langchain_community/document_loaders/parsers/pdf.py", line 361, in lazy_parse
+    raise ImportError(
+ImportError: `pypdf` package not found, please install it with `pip install pypdf`
+2026-02-14 18:19:33,120 - agent - ERROR - vector_store.py:101 - 加载知识库data/贝克洛门窗产品100问完整版.pdf失败，失败信息: 'RecursiveCharacterTextSplitter' object has no attribute 'spilt_documents'
+Traceback (most recent call last):
+  File "/Users/kerwin/Desktop/Fish_Chatbot/rag/vector_store.py", line 87, in load_document
+    spilt_document: list[Document] = self.spilter.spilt_documents(documents)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'RecursiveCharacterTextSplitter' object has no attribute 'spilt_documents'
+2026-02-14 18:19:59,980 - agent - INFO - vector_store.py:97 - [加载知识库]['data/贝克洛门窗产品100问完整版.pdf']成功
+2026-02-14 18:21:54,615 - agent - INFO - vector_store.py:77 - 加载知识库data/贝克洛门窗产品100问完整版.pdf已经存在知识库内
+2026-02-14 18:21:59,612 - agent - INFO - vector_store.py:97 - [加载知识库]['data/贝克洛门窗100问精简版.txt']成功
