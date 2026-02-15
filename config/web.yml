@@ -1,0 +1,6 @@
+database_path: data/web.db
+jwt_secret_key: fish-chatbot-secret-key-2026-secure
+jwt_algorithm: HS256
+access_token_expire_minutes: 1440
+api_host: "0.0.0.0"
+api_port: 8000

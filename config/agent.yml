@@ -1,1 +1,2 @@
 external_data_path: data/external/records
+model : qwen3-max

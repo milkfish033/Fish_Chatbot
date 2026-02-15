@@ -1,0 +1,2 @@
+memory_storage_path : ./data/chat_memory
+max_history_rounds : 10

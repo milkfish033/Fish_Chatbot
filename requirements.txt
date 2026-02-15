@@ -1,0 +1,7 @@
+# 项目依赖（含 Web API）
+PyYAML>=6.0
+sqlalchemy>=2.0
+bcrypt>=4.0
+PyJWT>=2.0
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
