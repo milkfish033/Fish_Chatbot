@@ -64,4 +64,4 @@ def text_loader(file_path: str):
     """
    加载txt文件
     """
-    return TextLoader(file_path).load()
+    return TextLoader(file_path, encoding = 'utf-8').load()
