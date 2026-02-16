@@ -7,7 +7,7 @@ from utils.path_tool import get_abs_path
 from utils.file_handler import text_loader, pdf_loader, listdir_with_allowed_type, get_file_md5_hex
 from utils.logger_handler import logger
 from langchain_core.documents import Document
-
+import json 
 
 
 class VectorStoreService:
@@ -55,6 +55,31 @@ class VectorStoreService:
                 f.write(md5_for_check + "\n")
 
 
+        def json_loader(read_path: str):
+            with open(read_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            documents = []
+
+            for item in data:
+                content = item.get("text", "").strip()
+                model = item.get("model", "")
+                pages = item.get("pages", [])
+
+                if content:
+                    documents.append(
+                        Document(
+                            page_content=content,
+                            metadata={
+                                "model": model,
+                                "pages": pages,
+                                "source": "brochure"
+                            }
+                        )
+                    )
+
+            return documents
+
         def get_file_documents(read_path: str):
             if read_path.endswith("txt"):
                 return text_loader(read_path)
@@ -62,6 +87,9 @@ class VectorStoreService:
             if read_path.endswith("pdf"):
                 return pdf_loader(read_path)
 
+            if read_path.endswith("json"):
+                return json_loader(read_path)
+            
             return []
     
         allowed_files_path = listdir_with_allowed_type(
