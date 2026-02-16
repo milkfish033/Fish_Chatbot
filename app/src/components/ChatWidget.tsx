@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useAuth } from "@/contexts/AuthContext";
 import { sendChatMessage } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -114,7 +116,13 @@ export default function ChatWidget({ open, onClose }: ChatWidgetProps) {
                   : "bg-white border border-gray-200 text-gray-800 shadow-xs"
               )}
             >
-              <div className="whitespace-pre-wrap break-words">{m.content}</div>
+              {m.role === "assistant" ? (
+                <div className="prose prose-sm prose-gray max-w-none break-words prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2 prose-pre:my-2 prose-code:before:content-none prose-code:after:content-none prose-code:bg-gray-200 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
+                </div>
+              ) : (
+                <div className="whitespace-pre-wrap break-words">{m.content}</div>
+              )}
             </div>
           </div>
         ))}

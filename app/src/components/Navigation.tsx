@@ -13,11 +13,7 @@ const navLinks = [
   { href: '#contact', label: '联系我们' },
 ];
 
-interface NavigationProps {
-  onOpenConsult?: () => void;
-}
-
-const Navigation = ({ onOpenConsult }: NavigationProps) => {
+const Navigation = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -104,7 +100,7 @@ const Navigation = ({ onOpenConsult }: NavigationProps) => {
                 退出
               </Button>
               <button
-                onClick={onOpenConsult}
+                onClick={() => navigate("/chat")}
                 className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 border border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white flex items-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
@@ -176,7 +172,7 @@ const Navigation = ({ onOpenConsult }: NavigationProps) => {
                 退出登录
               </Button>
               <button
-                onClick={() => { onOpenConsult?.(); setIsMobileMenuOpen(false); }}
+                onClick={() => { navigate("/chat"); setIsMobileMenuOpen(false); }}
                 className="w-full py-4 border border-brand-blue text-brand-blue font-medium rounded-xl hover:bg-brand-blue hover:text-white transition-colors flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
