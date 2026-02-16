@@ -1,7 +1,7 @@
 from typing import Sequence
 from langchain_core.chat_history import BaseChatMessageHistory
 import os, json 
-from langchain_core.messages import message_to_dict, messages_from_dict, BaseMessage
+from langchain_core.messages import message_to_dict, messages_from_dict, BaseMessage, HumanMessage
 from dotenv import load_dotenv
 from langchain_community.chat_models.tongyi import ChatTongyi
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
@@ -48,10 +48,13 @@ class FileChatMessageHistory(BaseChatMessageHistory):
             with open(self.file_path, "r", encoding="utf-8") as f:
                 messages_data = json.load(f)
             new_messages = messages_from_dict(messages_data)
-            # 只返回最近N轮对话 (1轮 = human + ai = 2条消息)
+            # 只返回最近N轮对话 (1轮 = 从HumanMessage到下一个HumanMessage之前的所有消息)
+            # 不能按固定条数截断，因为 tool 调用会产生额外消息
             if self.max_rounds > 0:
-                max_msgs = self.max_rounds * 2
-                new_messages = new_messages[-max_msgs:]
+                round_starts = [i for i, m in enumerate(new_messages) if isinstance(m, HumanMessage)]
+                if len(round_starts) > self.max_rounds:
+                    cut = round_starts[-self.max_rounds]
+                    new_messages = new_messages[cut:]
             return new_messages
         except FileNotFoundError:
             return []
