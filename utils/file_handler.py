@@ -3,7 +3,7 @@ import hashlib
 from utils.logger_handler import logger
 from langchain_core.documents import Document 
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
-
+import json 
 
 def get_file_md5_hex(filepath:str):
     """
@@ -65,3 +65,26 @@ def text_loader(file_path: str):
    加载txt文件
     """
     return TextLoader(file_path, encoding = 'utf-8').load()
+
+"""
+json转化为list格式"""
+def json_loader(read_path: str):
+            with open(read_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            documents = []
+
+            for item in data:
+                query = item.get("query", "").strip()
+                relevant_contents = item.get("relevant_contents", [])
+                reference_answer = item.get("reference_answer", "")
+
+                if query:
+                    documents.append({
+                                "query": query,
+                                "relevant_contents": relevant_contents,
+                                "reference_answer": reference_answer,
+                        })
+                    
+
+            return documents

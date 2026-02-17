@@ -130,14 +130,17 @@ class VectorStoreService:
 
             
 if __name__ == '__main__':
+    # print("正在初始化VectorStoreService...")
     vs = VectorStoreService()
+    # print("初始化完成，开始加载文档...")
+    # vs.load_document()
+    # print("加载完成")
+    # print("+"*20)
+    print(vs.vector_store._collection.count())
+    # retriever = vs.get_retriever()
 
-    vs.load_document()
+    # res = retriever.invoke("贝克洛")
 
-    retriever = vs.get_retriever()
-
-    res = retriever.invoke("贝克洛")
-
-    for r in res:
-        print(r.page_content)
-        print("=*30")
+    # for r in res:
+    #     print(r.page_content)
+    #     print("=*30")
