@@ -25,8 +25,11 @@ class AgentFactory(BaseModelFactory):
      def generator(self) -> Optional[Embeddings | BaseChatModel]:
         return ChatTongyi(model = agent_conf["model"])
     
-
+class RouterFactory(BaseModelFactory):
+     def generator(self) -> Optional[Embeddings | BaseChatModel]:
+        return ChatTongyi(model = agent_conf["model"])
 
 chat_model = ChatModelFactory().generator()
 embed_model = EmbeddingsFactory().generator()
 agent_model = AgentFactory().generator()
+router_model = RouterFactory().generator()
