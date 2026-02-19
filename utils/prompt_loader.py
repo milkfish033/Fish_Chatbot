@@ -60,6 +60,20 @@ def load_intent_prompts():
 
 
 
+def load_sql_bello_prompts():
+    try:
+        system_prompt_path = get_abs_path(prompts_conf["sql_bello_prompt_path"])
+    except KeyError as e:
+        logger.error(f"[load_sql_bello_prompts]在yaml中没有配置sql_bello_prompt_path")
+        raise e
+
+    try:
+        return open(system_prompt_path, "r", encoding = 'utf-8').read()
+    except Exception as e:
+        logger.error(f"[load_sql_bello_prompts]解析SQL Bello提示词出错, {str(e)}")
+        raise e
+
+
 if __name__ == '__main__':
     print(load_system_prompts())
     print("+"*50)

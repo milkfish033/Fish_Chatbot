@@ -127,16 +127,41 @@ def chat(
     user_id: int = Depends(get_current_user_id),
 ):
     """
-    在线咨询：调用 Bello 智能助手完成聊天会话。
-    session_id 使用当前登录用户的 user_id，保证每个用户独立的聊天历史。
+    在线咨询：经过 prompt 清洗、注入检测、意图路由后，分流到 Bello 或 SQL Bello。
     """
     if not data.message or not data.message.strip():
         raise HTTPException(status_code=400, detail="消息不能为空")
+
+    # 1. Prompt 清洗
+    from prompts.Prompt_filtering import prompt_filter
+    pf = prompt_filter()
+    cleaned_message = pf.clean_prompt(data.message.strip())
+
+    if not cleaned_message:
+        raise HTTPException(status_code=400, detail="消息内容无效")
+
+    # 2. Prompt 注入检测
+    injection_result = pf.detect_prompt_injection(cleaned_message)
+    if injection_result["blocked"]:
+        logger.warning(f"用户 {user_id} 触发注入检测: {injection_result['category']}")
+        return ChatResponse(reply="检测到异常输入，请重新描述您的需求。")
+
+    # 3. Router 意图识别 + 分流调用
     try:
-        from agent.bello import ReactAgent
-        agent = ReactAgent()
+        from agent.router import Router
+        router = Router()
+        route = router.route(cleaned_message)
         session_id = f"user_{user_id}"
-        result = agent.invoke(data.message.strip(), session_id=session_id)
+
+        if route == "sql_agent":
+            from agent.sql_bello import ReactAgent as SqlBelloAgent
+            agent = SqlBelloAgent()
+            result = agent.invoke(cleaned_message, session_id=session_id, user_id=user_id)
+        else:
+            from agent.bello import ReactAgent as BelloAgent
+            agent = BelloAgent()
+            result = agent.invoke(cleaned_message, session_id=session_id)
+
         messages = result.get("messages", [])
         if not messages:
             raise HTTPException(status_code=500, detail="助手暂无响应")

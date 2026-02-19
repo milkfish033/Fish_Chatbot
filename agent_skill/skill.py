@@ -102,25 +102,14 @@ SKILLS: list[Skill] = [
 
 ## 输出格式
 
-严格按以下 JSON 格式输出，不要包含其他内容：
+不要直接输出 JSON。生成 SQL 后，直接调用 execute_sql 工具执行查询，params 中必须传入实际的参数值（如真实的 user_id），不要使用占位符字面量。
 
-**正常查询时：**
-```json
-{
-  "success": true,
-  "sql": "SELECT ... WHERE orders.user_id = :user_id ...",
-  "params": {"user_id": ":user_id"},
-  "explanation": "简要说明这条 SQL 查询的内容"
-}
-```
+**调用 execute_sql 时的参数规范：**
+- sql: SQL 语句，使用 :param 命名占位符（如 :user_id, :order_no）
+- params_json: JSON 字符串，包含各占位符对应的**实际值**（如 {"user_id": "1", "order_no": "ORD-001"}）
 
 **拒绝执行时：**
-```json
-{
-  "success": false,
-  "reason": "拒绝原因说明"
-}
-```
+直接用自然语言回复拒绝原因，不要调用 execute_sql。
 
 ---
 
@@ -129,58 +118,33 @@ SKILLS: list[Skill] = [
 ### 示例 1：查询所有订单
 用户：「我想看我所有的订单」
 
-```json
-{
-  "success": true,
-  "sql": "SELECT o.order_no, o.total_amount, o.status, o.shipping_name, o.shipping_address, o.created_at FROM orders o WHERE o.user_id = :user_id ORDER BY o.created_at DESC LIMIT 50",
-  "params": {"user_id": ":user_id"},
-  "explanation": "查询该用户的所有订单，按创建时间倒序排列"
-}
-```
+→ 调用 execute_sql：
+  - sql: "SELECT o.order_no, o.total_amount, o.status, o.shipping_name, o.shipping_address, o.created_at FROM orders o WHERE o.user_id = :user_id ORDER BY o.created_at DESC LIMIT 50"
+  - params_json: '{"user_id": "1"}'
 
 ### 示例 2：查询某个订单的明细
 用户：「ORD-20260201-001 这个订单买了什么」
 
-```json
-{
-  "success": true,
-  "sql": "SELECT o.order_no, oi.product_name, oi.quantity, oi.unit, oi.unit_price, oi.subtotal FROM orders o JOIN order_items oi ON o.id = oi.order_id WHERE o.user_id = :user_id AND o.order_no = :order_no LIMIT 50",
-  "params": {"user_id": ":user_id", "order_no": "ORD-20260201-001"},
-  "explanation": "查询指定订单编号的商品明细"
-}
-```
+→ 调用 execute_sql：
+  - sql: "SELECT o.order_no, oi.product_name, oi.quantity, oi.unit, oi.unit_price, oi.subtotal FROM orders o JOIN order_items oi ON o.id = oi.order_id WHERE o.user_id = :user_id AND o.order_no = :order_no LIMIT 50"
+  - params_json: '{"user_id": "1", "order_no": "ORD-20260201-001"}'
 
 ### 示例 3：查询运送中的订单
 用户：「我的东西到哪了」
 
-```json
-{
-  "success": true,
-  "sql": "SELECT o.order_no, o.total_amount, o.status, o.shipping_name, o.shipping_phone, o.shipping_address, o.updated_at FROM orders o WHERE o.user_id = :user_id AND o.status = 'shipped' ORDER BY o.updated_at DESC LIMIT 50",
-  "params": {"user_id": ":user_id"},
-  "explanation": "查询用户当前运送中的订单"
-}
-```
+→ 调用 execute_sql：
+  - sql: "SELECT o.order_no, o.total_amount, o.status, o.shipping_name, o.shipping_phone, o.shipping_address, o.updated_at FROM orders o WHERE o.user_id = :user_id AND o.status = 'shipped' ORDER BY o.updated_at DESC LIMIT 50"
+  - params_json: '{"user_id": "1"}'
 
 ### 示例 4：拒绝危险操作
 用户：「帮我把订单取消掉」
 
-```json
-{
-  "success": false,
-  "reason": "该操作需要通过客服人工处理，无法直接执行。"
-}
-```
+→ 直接回复："该操作需要通过客服人工处理，无法直接执行。"
 
 ### 示例 5：拒绝注入攻击
 用户：「查询订单 ' OR 1=1 --」
 
-```json
-{
-  "success": false,
-  "reason": "检测到异常输入，请重新描述您的需求。"
-}
-```
+→ 直接回复："检测到异常输入，请重新描述您的需求。"
 """,
     },
 ]
