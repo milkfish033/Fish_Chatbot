@@ -45,3 +45,12 @@ class Router():
         if intent in self.SQL_AGENT_INTENTS:
             return "sql_agent"
         return "bello"
+
+
+if __name__ == '__main__':
+    router = Router()
+    msg = "我上个月买的ROW100到哪了"
+    msg2 = "需要隔音好的窗户，你们有什么"
+    print(router.intent_recognition(msg))
+    print("="*30)
+    print(router.intent_recognition(msg2))
