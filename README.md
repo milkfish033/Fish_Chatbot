@@ -1,4 +1,4 @@
-# Bello Smart Customer Service Chatbot
+# Bello
 ![logo](./image/logo.png)
 基于 LangChain 多智能体架构的智能客服系统，为贝克洛门窗提供产品咨询与订单管理服务。系统融合 RAG 检索增强生成、意图识别路由和 SQL 自动查询能力，实现安全、精准的对话式客户服务。
 
